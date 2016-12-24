@@ -151,13 +151,13 @@ public class ProfileServices extends Service implements SensorEventListener {
             audioManager.setStreamVolume(AudioManager.STREAM_RING,audioManager.getStreamMaxVolume(AudioManager.STREAM_RING),0);
 
         } else if (_shacking && _inFront && !_lightOn){
-            //Pocket
+            //Pocket Profile
             //Vibration On, Ringer Medium
 
             audioManager.setStreamVolume(AudioManager.STREAM_RING,20,0);
             audioManager.getStreamVolume(AudioManager.STREAM_RING);
         } else if (!_faceUp && _inFront && !_lightOn){
-            //Silent
+            //Silent Profile
             //Only Vibration
             audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
         }
