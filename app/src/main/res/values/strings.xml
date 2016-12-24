@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Smart_Profile</string>
+    <string name="disable">Disable Services</string>
+    <string name="enable_services">Enable Services</string>
+</resources>
