@@ -12,9 +12,7 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-/**
- * Created by Sunny on 12/25/2016.
- */
+
 
 public class ProfileServices extends Service implements SensorEventListener {
 
@@ -29,7 +27,7 @@ public class ProfileServices extends Service implements SensorEventListener {
     public static final int SHAKE_THRESHOLD = 800;
 
     //For Condition Flag
-    public boolean _faceUp=true,_inFront=false,_lightOn=true,_shacking=false;
+    public boolean _faceUp=true,_inFront=true,_lightOn=true,_shacking=true;
 
     @Override
     public void onCreate() {
@@ -91,8 +89,6 @@ public class ProfileServices extends Service implements SensorEventListener {
                 _lightOn = false;
             } else if (event.values[0] >= 10){
                 _lightOn = true;
-            } else {
-                //Nothing Here
             }
         }
 
@@ -121,8 +117,6 @@ public class ProfileServices extends Service implements SensorEventListener {
             } else if (z < 1){
                 _faceUp = false;
                 //audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-            } else{
-                //Nothing happens
             }
 
             // For Phone Shaking Part
@@ -166,8 +160,6 @@ public class ProfileServices extends Service implements SensorEventListener {
             //Silent
             //Only Vibration
             audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-        } else {
-            //
         }
 
     }
