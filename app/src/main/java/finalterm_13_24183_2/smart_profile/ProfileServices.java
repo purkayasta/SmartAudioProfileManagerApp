@@ -147,15 +147,17 @@ public class ProfileServices extends Service implements SensorEventListener {
         if (_faceUp && !_inFront && _lightOn){
             // For Home Profile
             //No Vibration, Ringer Loud
-            //audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             audioManager.setStreamVolume(AudioManager.STREAM_RING,audioManager.getStreamMaxVolume(AudioManager.STREAM_RING),0);
-
+            audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
+                    AudioManager.VIBRATE_SETTING_OFF);
         } else if (_shacking && _inFront && !_lightOn){
             //Pocket Profile
             //Vibration On, Ringer Medium
 
             audioManager.setStreamVolume(AudioManager.STREAM_RING,20,0);
-            audioManager.getStreamVolume(AudioManager.STREAM_RING);
+            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            //audioManager.getStreamVolume(AudioManager.STREAM_RING);
         } else if (!_faceUp && _inFront && !_lightOn){
             //Silent Profile
             //Only Vibration
