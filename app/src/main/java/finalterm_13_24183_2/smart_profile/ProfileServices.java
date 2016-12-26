@@ -8,7 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.IBinder;
-import android.os.Vibrator;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
@@ -24,7 +24,7 @@ public class ProfileServices extends Service implements SensorEventListener {
     //Shaking Part Variables
     public long lastUpdate = 0;
     public float last_x,last_y,last_z;
-    public static final int SHAKE_THRESHOLD = 800;
+    public static final int SHAKE_THRESHOLD = 700;
 
     //For Condition Flag
     public boolean _faceUp=true,_inFront=true,_lightOn=true,_shacking=true;
@@ -85,7 +85,7 @@ public class ProfileServices extends Service implements SensorEventListener {
 
         //For Light
         if (event.sensor.getType() == Sensor.TYPE_LIGHT){
-            if (event.values[0] < 7){
+            if (event.values[0] < 6){
                 _lightOn = false;
             } else if (event.values[0] >= 10){
                 _lightOn = true;
@@ -125,7 +125,7 @@ public class ProfileServices extends Service implements SensorEventListener {
             long currentTime = System.currentTimeMillis();
 
             //Checks After 100 milli second for battery performance
-            if ((currentTime - lastUpdate) > 50){
+            if ((currentTime - lastUpdate) > 100){
                 long differentTime = (currentTime - lastUpdate);
                 lastUpdate = currentTime;
 
@@ -149,17 +149,20 @@ public class ProfileServices extends Service implements SensorEventListener {
             //No Vibration, Ringer Loud
             audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             audioManager.setStreamVolume(AudioManager.STREAM_RING,audioManager.getStreamMaxVolume(AudioManager.STREAM_RING),0);
+            SystemClock.sleep(20);
+
         } else if (_shacking && _inFront && !_lightOn){
             //Pocket Profile
             //Vibration On, Ringer Medium
             audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             audioManager.setStreamVolume(AudioManager.STREAM_RING,20,0);
-            //audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-            //audioManager.getStreamVolume(AudioManager.STREAM_RING);
+            SystemClock.sleep(20);
+
         } else if (!_faceUp && _inFront && !_lightOn){
             //Silent Profile
             //Only Vibration
             audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            SystemClock.sleep(20);
         }
 
     }
