@@ -8,7 +8,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
@@ -158,7 +157,6 @@ public class ProfileServices extends Service implements SensorEventListener {
             //No Vibration, Ringer Loud
             audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             audioManager.setStreamVolume(AudioManager.STREAM_RING,audioManager.getStreamMaxVolume(AudioManager.STREAM_RING),0);
-            SystemClock.sleep(30);
 
         } else if (_shacking && _inFront && !_lightOn){
             Log.d("Profile", "Pocket");
@@ -166,14 +164,12 @@ public class ProfileServices extends Service implements SensorEventListener {
             //Vibration On, Ringer Medium
             audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             audioManager.setStreamVolume(AudioManager.STREAM_RING,20,0);
-            SystemClock.sleep(30);
 
         } else if (!_faceUp && _inFront && !_lightOn){
             Log.d("Profile", "Silent");
             //Silent Profile
             //Only Vibration
             audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-            SystemClock.sleep(30);
         }
 
     }
