@@ -7,10 +7,7 @@
     android:background="@android:color/background_dark"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+
     tools:context="finalterm_13_24183_2.smart_profile.MainActivity">
 
 
