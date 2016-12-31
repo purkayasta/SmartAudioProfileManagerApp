@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 public class ProfileServices extends Service implements SensorEventListener {
 
+    //Important Variables
     public AudioManager audioManager;
     public SensorManager sensorManager;
     public Sensor accelerometerSensor,proximitySensor,lightSensor;
@@ -28,7 +29,7 @@ public class ProfileServices extends Service implements SensorEventListener {
     public static final int SHAKE_THRESHOLD = 700;
 
     //For Condition Flag
-    public boolean _faceUp=false,_inFront=false,_lightOn=false,_shacking=false;
+    boolean _faceUp=false,_inFront=false,_lightOn=false,_shacking=false;
 
     @Override
     public void onCreate() {
@@ -42,21 +43,28 @@ public class ProfileServices extends Service implements SensorEventListener {
         proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
-        //Now Check Sensor Availability
+        /*
+        Now Check Sensor Availability
+        As We are working on three sensors so checking this three sensors are available or not
+        If not available then this profile manager is not going to work
+        */
         if (accelerometerSensor != null){
             sensorManager.registerListener(this,accelerometerSensor,SensorManager.SENSOR_DELAY_NORMAL);
+            Toast.makeText(this,"Accelerometer Sensor Found",Toast.LENGTH_SHORT).show();
         }
         if (proximitySensor != null){
             sensorManager.registerListener(this,proximitySensor,SensorManager.SENSOR_DELAY_NORMAL);
+            Toast.makeText(this,"Proximity Sensor Found",Toast.LENGTH_SHORT).show();
         }
         if (lightSensor != null){
             sensorManager.registerListener(this,lightSensor,SensorManager.SENSOR_DELAY_NORMAL);
+            Toast.makeText(this,"Light Sensor Found",Toast.LENGTH_SHORT).show();
         }
     }
 
 
 
-    //When Service Start
+    //Every Time Service Started this command execute
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this,"Service Enable",Toast.LENGTH_SHORT).show();
@@ -88,7 +96,7 @@ public class ProfileServices extends Service implements SensorEventListener {
         if (event.sensor.getType() == Sensor.TYPE_LIGHT){
             if (event.values[0] < 6){
                 _lightOn = false;
-            } else if (event.values[0] >= 10){
+            } else if (event.values[0] >= 9){
                 _lightOn = true;
             }
         }
@@ -107,6 +115,7 @@ public class ProfileServices extends Service implements SensorEventListener {
 
         //For Accelerometer
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
@@ -118,7 +127,7 @@ public class ProfileServices extends Service implements SensorEventListener {
                 _faceUp = true;
                 Log.d("Accelerometer", "Face Up");
                 //audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-            } else if (z <= 3){
+            } else if (z <= 2){
                 _faceUp = false;
                 Log.d("Accelerometer", "Face Down");
                 //audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
@@ -158,22 +167,22 @@ public class ProfileServices extends Service implements SensorEventListener {
             //No Vibration, Ringer Loud
             audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             audioManager.setStreamVolume(AudioManager.STREAM_RING,audioManager.getStreamMaxVolume(AudioManager.STREAM_RING),0);
-            SystemClock.sleep(30);
+            SystemClock.sleep(20);
 
         } else if (_shacking && _inFront && !_lightOn){
             Log.d("Profile", "Pocket");
             //Pocket Profile
             //Vibration On, Ringer Medium
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
             audioManager.setStreamVolume(AudioManager.STREAM_RING,20,0);
-            SystemClock.sleep(30);
+            SystemClock.sleep(20);
 
         } else if (!_faceUp && _inFront && !_lightOn){
             Log.d("Profile", "Silent");
             //Silent Profile
             //Only Vibration
             audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-            SystemClock.sleep(30);
+            SystemClock.sleep(20);
         }
 
     }
