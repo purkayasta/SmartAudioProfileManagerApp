@@ -9,6 +9,7 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class ProfileServices extends Service implements SensorEventListener {
     @Override
     public void onCreate() {
         super.onCreate();
+
         //getting audio services
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         //Getting Sensor Service
@@ -105,10 +107,8 @@ public class ProfileServices extends Service implements SensorEventListener {
         if (event.sensor.getType() == Sensor.TYPE_PROXIMITY){
             if (event.values[0] == 0){
                 _inFront = true;
-                Log.d("Proximity", "True");
             } else {
                 _inFront = false;
-                Log.d("Proximity", "False");
             }
         }
 
@@ -125,11 +125,9 @@ public class ProfileServices extends Service implements SensorEventListener {
             if ((x < 2.0 && x > -2.0) && (y < 2.0 && y> -2.0) && z > 8.0){
                 //Face Up
                 _faceUp = true;
-                Log.d("Accelerometer", "Face Up");
                 //audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             } else if (z <= 2){
                 _faceUp = false;
-                Log.d("Accelerometer", "Face Down");
                 //audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
             }
 
@@ -150,39 +148,39 @@ public class ProfileServices extends Service implements SensorEventListener {
                     //Device Shake
                     //Toast.makeText(this,"Shaking",Toast.LENGTH_SHORT).show();
                     _shacking = true;
-
-                    Log.d("Sensor","Shaked ");
                 } else {
                     _shacking = false;
-                    Log.d("Sensor", "Not Shaked ");
                 }
             }
         }
 
         //Profile Manager
 
+
         if (_faceUp && !_inFront && _lightOn){
-            Log.d("Profile", "home");
             // For Home Profile
             //No Vibration, Ringer Loud
+
             audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            //audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             audioManager.setStreamVolume(AudioManager.STREAM_RING,audioManager.getStreamMaxVolume(AudioManager.STREAM_RING),0);
-            SystemClock.sleep(20);
+            SystemClock.sleep(10);
 
         } else if (_shacking && _inFront && !_lightOn){
-            Log.d("Profile", "Pocket");
             //Pocket Profile
             //Vibration On, Ringer Medium
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-            audioManager.setStreamVolume(AudioManager.STREAM_RING,20,0);
-            SystemClock.sleep(20);
+            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            audioManager.setStreamVolume(AudioManager.STREAM_RING, audioManager.getStreamVolume(AudioManager.STREAM_RING), 1);
+
+
+            SystemClock.sleep(10);
 
         } else if (!_faceUp && _inFront && !_lightOn){
-            Log.d("Profile", "Silent");
+
             //Silent Profile
             //Only Vibration
             audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-            SystemClock.sleep(20);
+            SystemClock.sleep(10);
         }
 
     }
